@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.example.demo.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.cassandra.core.CassandraTemplate;
@@ -43,6 +44,15 @@ public class StudentService {
     public Optional<List<Student>> getAllStudents() {
         String cql = "SELECT * FROM student";
         return Optional.ofNullable(cassandraTemplate.select(cql, Student.class));
+    }
+
+    public Optional<Student> getStudentById(int id) {
+        SimpleStatement statement = SimpleStatement.newInstance(
+                "SELECT * FROM student WHERE student_id = ?",
+                id
+        );
+        Student student = cassandraTemplate.selectOne(statement, Student.class);
+        return Optional.ofNullable(student);
     }
 
 

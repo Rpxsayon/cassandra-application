@@ -35,6 +35,15 @@ public class StudentController {
                 .orElseGet(Collections::emptyList));
     }
 
+    @GetMapping("/getStudentById/{id}")
+    public ResponseEntity<Student> getStudentById(@PathVariable("id") int id){
+        return ResponseEntity.status(HttpStatus.OK).body(studentService.getStudentById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Student with id "+id+" not found"
+                )));
+    }
+
 
 
 
